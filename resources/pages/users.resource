@@ -51,7 +51,7 @@ Adicionar cinco novos usuários
 # Asserções
 
 Verificar se a lista de usuários está vazia
-    Element Should Be Visible    ${lista.vazia}
+    Element Should Not Be Visible    ${lista.vazia}
 
 Verificar se o usuário foi cadastrado
     Is Snackbar Text    Usuário cadastrado com sucesso!
