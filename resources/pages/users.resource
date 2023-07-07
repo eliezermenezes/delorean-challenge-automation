@@ -1,6 +1,5 @@
 *** Settings ***
-Resource    ../setup.resource
-Library     String
+Resource    ../main.resource
 
 
 *** Variables ***
@@ -51,13 +50,13 @@ Adicionar cinco novos usuários
 # Asserções
 
 Verificar se a lista de usuários está vazia
-    Element Should Not Be Visible    ${lista.vazia}
+    Element Should Be Visible    ${lista.vazia}
 
 Verificar se o usuário foi cadastrado
-    Is Snackbar Text    Usuário cadastrado com sucesso!
+    A mensagem "Usuário cadastrado com sucesso!" deve ser exibida
 
 Verificar se o usuário foi editado
-    Is Snackbar Text    Usuário atualizado com sucesso!
+    A mensagem "Usuário atualizado com sucesso!" deve ser exibida
 
 Verificar se o usuário foi removido
-    Is Snackbar Text    Usuário deletado com sucesso!
+    A mensagem "Usuário deletado com sucesso!" deve ser exibida

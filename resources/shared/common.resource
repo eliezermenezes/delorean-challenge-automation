@@ -1,5 +1,5 @@
 *** Settings ***
-Resource    ../setup.resource
+Resource    ../main.resource
 
 
 *** Variables ***
@@ -8,7 +8,9 @@ Resource    ../setup.resource
 ...                     cancelar=css:[data-test="cancel"]
 ...                     sim=css:[data-test="yes"]
 ...                     deletar=css:[data-test="delete-multiple"]
-${selecionar_todos}     css:[data-test="select-all"]
+&{caixa_de_selecao}
+...                     todos=css:[data-test="select-all"]
+${notificacao}          xpath=//div[contains(@class,"mdc-snackbar__label") and contains(text(),"#message")]
 
 
 *** Keywords ***
@@ -25,4 +27,9 @@ Clicar no botão remover selecionados
     Click Button    ${botao.deletar}
 
 Clicar para selecionar todos os registros da tabela
-    Click Element    ${selecionar_todos}
+    Click Element    ${caixa_de_selecao.todos}
+
+# Asserções
+
+A mensagem "${experada}" deve ser exibida
+    Wait Until Element Is Visible    ${notificacao.replace("#message", "${experada}")}

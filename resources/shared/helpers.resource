@@ -1,11 +1,5 @@
 *** Settings ***
-Library     SeleniumLibrary
-Library     FakerLibrary    locale=pt_BR
-Library     String
-
-
-*** Variables ***
-${notificacao}      xpath=//div[contains(@class,"mdc-snackbar__label") and contains(text(),"#message")]
+Resource    ../main.resource
 
 
 *** Keywords ***
@@ -29,8 +23,3 @@ Select Multiple Checkboxes
     FOR    ${element}    IN    @{chosen_elements}
         Select Checkbox    ${element}
     END
-
-Is Snackbar Text
-    [Arguments]    ${expected}
-    ${element}    Replace String    ${notificacao}    \#message    ${expected}
-    Wait Until Element Is Visible    ${element}
