@@ -13,17 +13,17 @@ jobs:
         image: selenium/standalone-chrome:latest
 
     steps:
-      - name: Setup Chrome WebDriver
-        # uses: nanasess/setup-chromedriver@v1.1.0
-        run: |
-          cd /tmp
-          sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb
-          sudo apt install --fix-broken -y
-          sudo dpkg -i google-chrome-stable_current_amd64.deb
-
       - name: Check Out Repository
         uses: actions/checkout@v2
+
+      - name: Setup Chrome WebDriver
+        uses: nanasess/setup-chromedriver@v1.1.0
+        # run: |
+        #   cd /tmp
+        #   sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        #   sudo dpkg -i google-chrome-stable_current_amd64.deb
+        #   sudo apt install --fix-broken -y
+        #   sudo dpkg -i google-chrome-stable_current_amd64.deb
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
