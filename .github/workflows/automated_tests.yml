@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Chrome WebDriver
-        uses: nanasess/setup-chromedriver@v1.1.0
+        uses: nanasess/setup-chromedriver@v2
         # run: |
         #   cd /tmp
         #   sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -31,7 +31,10 @@ jobs:
           python-version: 3.8
 
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python --version
+          chromedriver --version
+          pip install -r requirements.txt
 
       - name: Run Automated Tests
-        run: robot -d results tests
+        run: robot -d results -v BROWSER:headlesschrome tests
