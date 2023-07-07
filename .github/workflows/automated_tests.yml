@@ -1,16 +1,13 @@
 name: Automated Tests
+
 on:
   push:
     branches:
       - master
 
 jobs:
-  test:
+  webdriver:
     runs-on: ubuntu-latest
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome:latest
 
     steps:
       - name: Check Out Repository
@@ -18,23 +15,34 @@ jobs:
 
       - name: Setup Chrome WebDriver
         uses: nanasess/setup-chromedriver@v2
-        # run: |
-        #   cd /tmp
-        #   sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        #   sudo dpkg -i google-chrome-stable_current_amd64.deb
-        #   sudo apt install --fix-broken -y
-        #   sudo dpkg -i google-chrome-stable_current_amd64.deb
 
-      - name: Set up Python 3.8
+  test:
+    runs-on: ubuntu-latest
+    needs: webdriver
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        options: --shm-size=2g
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
       - name: Install Dependencies
-        run: |
-          python --version
-          chromedriver --version
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run Automated Tests
         run: robot -d results -v BROWSER:headlesschrome tests
+
+      - name: Save Test Report
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Report
+          path: results
