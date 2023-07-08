@@ -6,19 +6,8 @@ on:
       - master
 
 jobs:
-  webdriver:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check Out Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Chrome WebDriver
-        uses: nanasess/setup-chromedriver@v2
-
   test:
     runs-on: ubuntu-latest
-    needs: webdriver
 
     services:
       selenium:
@@ -26,10 +15,10 @@ jobs:
         options: --shm-size=2g
 
     steps:
-      - name: Check Out Repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set Up Python 3.8
+      - name: Setup Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
