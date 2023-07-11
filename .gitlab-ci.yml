@@ -1,27 +1,21 @@
 stages:
   - test
 
-# Job Linux Fedora - execução dos testes sem docker
+# Execução dos testes sem docker
 web-test:
+  image: fedora:39
   stage: test
-  image: ubuntu:latest
   tags:
     - docker
   before_script:
-    # Instalação do Google Chrome
-    - apt update -y && echo ...OK
-    - apt install -y wget && echo ...OK
-    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && echo ...OK
-    - dpkg -i google-chrome-stable_current_amd64.deb && echo ...OK
-    - apt install --fix-broken -y && echo ...OK
-    - google-chrome --version
-    - rm google-chrome-stable_current_amd64.deb
-    # Instalação do Python e dependências
-    - apt install -y python3.10 python3-pip python3.10-venv && echo ...OK
-    - python3 --version
-    - python3 -m venv venv
-    - source venv/bin/activate
-    - pip3 install -r requirements.txt && echo ...OK
+    - dnf upgrade -y --refresh
+    - dnf install -y python37 python3-pip chromedriver-114.0* chromium-114.0*
+    - dnf clean all
+    - chown root /usr/bin/chromedriver
+    - chmod +x /usr/bin/chromedriver
+    - chmod 755 /usr/bin/chromedriver
+    - chromedriver --version
+    - pip3 install -r requirements.txt
   script:
     - robot -d ./results -v BROWSER:headlesschrome ./tests
 
@@ -31,15 +25,14 @@ web-test:
       - ./results
     expire_in: 1 week
 
-# Job Linux Fedora - execução dos testes em container docker
+# Execução dos testes em container docker publicado no GitLab Registry
 web-test-docker:
-  stage: test
   image: registry.gitlab.com/delorean-challenge/robotframework-images:latest
+  stage: test
   tags:
     - docker
   script:
     - robot -d ./results -v BROWSER:headlesschrome ./tests
-
   artifacts:
     when: always
     paths:
